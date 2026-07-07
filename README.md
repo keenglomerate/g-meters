@@ -13,19 +13,49 @@ The tool utilizes a hybrid architecture: it can connect to a secure **Local Brid
 - **Dual Connection Modes:** Attempts to sync via the Local Bridge, falling back to your Cloud Proxy URL if you are away from your development machine.
 - **Multitasking Alert Details:** Expand detailed statistics for TPM (Tokens/Minute), RPM (Requests/Minute), and daily quotas.
 
+## 🛠️ Installation & Setup
+
+G-Meters is lightweight and designed to run with **zero external dependencies** on the host machine.
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/keenglomerate/g-meters.git
+cd g-meters
+```
+
+### 2. Make the Daemon executable
+Ensure the local Python script has execute permissions:
+```bash
+chmod +x daemon.py
+```
+
+### 3. (Optional) Redirect your client SDKs for free quota monitoring
+To track your Anthropic Claude or Google Gemini limits for **zero extra tokens**, redirect your application's SDK base URLs to G-Meters:
+- **Anthropic Python SDK:**
+  ```python
+  from anthropic import Anthropic
+  client = Anthropic(
+      api_key="your-api-key",
+      base_url="http://localhost:5000"
+  )
+  ```
+- **Gemini API / curl calls:**
+  Redirect API requests from `https://generativelanguage.googleapis.com` to `http://localhost:5000`.
+
 ---
 
 ## 🚀 Getting Started
 
 ### 1. Launch the Local Bridge Daemon
-Run the lightweight background server (written in pure standard Python, no external libraries required):
+Run the background server in your terminal:
 ```bash
 ./daemon.py
 ```
-This runs a local CORS-enabled API server at `http://localhost:5000/api/quota`.
+This starts the local web server and transparent API proxy at `http://localhost:5000`.
 
 ### 2. Open the Widget
-Simply double-click the **`index.html`** file to run it in any web browser, or host the folder on a local dev server.
+Simply open **[http://localhost:5000](http://localhost:5000)** in any web browser to view your live quota dashboard! Alternatively, you can open the `index.html` file directly.
+
 
 ---
 
