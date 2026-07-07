@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A real-time, cross-platform dashboard widget to monitor token usage and API quotas for Google Antigravity, Gemini, and Anthropic Claude.">
+  <title>G-Meters | AI Quota & Token Monitor</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="background-decor"></div>
+  <div class="background-decor-2"></div>
+
+  <main class="widget-container">
+    <!-- Header -->
+    <header class="widget-header">
+      <div class="header-main">
+        <h1 id="widget-title">🔮 G-Meters</h1>
+        <div class="status-badge offline" id="connection-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Connecting...</span>
+        </div>
+      </div>
+      <p class="header-subtitle">Real-time LLM Token Availability & Quota Usage</p>
+    </header>
+
+    <!-- Dashboards Grid -->
+    <section class="dashboards-grid">
+      <!-- Gemini Card -->
+      <article class="quota-card gemini-card" id="card-gemini">
+        <div class="card-header">
+          <div class="provider-info">
+            <span class="provider-icon">🤖</span>
+            <div>
+              <h2>Gemini & Antigravity</h2>
+              <p class="api-endpoint" id="gemini-endpoint">localhost:5000</p>
+            </div>
+          </div>
+          <button class="details-btn" id="gemini-details-toggle" aria-label="Toggle Gemini Details">ℹ️</button>
+        </div>
+
+        <div class="rings-container">
+          <!-- Sprint Limit Ring -->
+          <div class="ring-wrapper">
+            <div class="svg-ring-container">
+              <svg class="progress-ring" width="120" height="120">
+                <circle class="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                <circle class="progress-ring-bar" id="gemini-sprint-ring" cx="60" cy="60" r="50"></circle>
+              </svg>
+              <div class="ring-value" id="gemini-sprint-pct">--%</div>
+            </div>
+            <span class="ring-label">Sprint Limit (5h)</span>
+          </div>
+
+          <!-- Weekly Baseline Ring -->
+          <div class="ring-wrapper">
+            <div class="svg-ring-container">
+              <svg class="progress-ring" width="120" height="120">
+                <circle class="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                <circle class="progress-ring-bar" id="gemini-weekly-ring" cx="60" cy="60" r="50"></circle>
+              </svg>
+              <div class="ring-value" id="gemini-weekly-pct">--%</div>
+            </div>
+            <span class="ring-label">Weekly Cap</span>
+          </div>
+        </div>
+
+        <!-- Meta info -->
+        <div class="card-footer">
+          <div class="footer-stat">
+            <span class="stat-lbl">Sprint Remaining:</span>
+            <span class="stat-val" id="gemini-sprint-usage">-- / -- tokens</span>
+          </div>
+          <div class="footer-stat">
+            <span class="stat-lbl">Reset Countdown:</span>
+            <span class="stat-val timer" id="gemini-reset-timer">--h --m --s</span>
+          </div>
+        </div>
+
+        <!-- Hidden Details Panel -->
+        <div class="details-panel hidden" id="gemini-details-panel">
+          <h3>Token Metrics</h3>
+          <div class="stat-row"><span>Tokens/Minute (TPM):</span> <span id="gemini-tpm">-- / --</span></div>
+          <div class="stat-row"><span>Requests/Minute (RPM):</span> <span id="gemini-rpm">-- / --</span></div>
+          <div class="stat-row"><span>Monthly Account Credit:</span> <span id="gemini-credits">--</span></div>
+        </div>
+      </article>
+
+      <!-- Claude Card -->
+      <article class="quota-card claude-card" id="card-claude">
+        <div class="card-header">
+          <div class="provider-info">
+            <span class="provider-icon">🍁</span>
+            <div>
+              <h2>Anthropic Claude</h2>
+              <p class="api-endpoint" id="claude-endpoint">localhost:5000</p>
+            </div>
+          </div>
+          <button class="details-btn" id="claude-details-toggle" aria-label="Toggle Claude Details">ℹ️</button>
+        </div>
+
+        <div class="rings-container">
+          <!-- Tokens Per Minute Ring -->
+          <div class="ring-wrapper">
+            <div class="svg-ring-container">
+              <svg class="progress-ring" width="120" height="120">
+                <circle class="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                <circle class="progress-ring-bar" id="claude-tpm-ring" cx="60" cy="60" r="50"></circle>
+              </svg>
+              <div class="ring-value" id="claude-tpm-pct">--%</div>
+            </div>
+            <span class="ring-label">Tokens / Min</span>
+          </div>
+
+          <!-- Daily Limits Ring -->
+          <div class="ring-wrapper">
+            <div class="svg-ring-container">
+              <svg class="progress-ring" width="120" height="120">
+                <circle class="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                <circle class="progress-ring-bar" id="claude-daily-ring" cx="60" cy="60" r="50"></circle>
+              </svg>
+              <div class="ring-value" id="claude-daily-pct">--%</div>
+            </div>
+            <span class="ring-label">Daily Limit</span>
+          </div>
+        </div>
+
+        <!-- Meta info -->
+        <div class="card-footer">
+          <div class="footer-stat">
+            <span class="stat-lbl">Minute Remaining:</span>
+            <span class="stat-val" id="claude-tpm-usage">-- / -- tokens</span>
+          </div>
+          <div class="footer-stat">
+            <span class="stat-lbl">TPM Reset:</span>
+            <span class="stat-val timer" id="claude-reset-timer">--s</span>
+          </div>
+        </div>
+
+        <!-- Hidden Details Panel -->
+        <div class="details-panel hidden" id="claude-details-panel">
+          <h3>Token Metrics</h3>
+          <div class="stat-row"><span>Requests/Minute (RPM):</span> <span id="claude-rpm">-- / --</span></div>
+          <div class="stat-row"><span>Requests/Day (RPD):</span> <span id="claude-rpd">-- / --</span></div>
+          <div class="stat-row"><span>Daily Dollar Quota:</span> <span id="claude-credits">--</span></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Toolbar / Settings Trigger -->
+    <footer class="widget-toolbar">
+      <button class="toolbar-btn" id="settings-toggle">⚙️ Connection Settings</button>
+      <button class="toolbar-btn primary-btn" id="manual-refresh">🔄 Refresh Now</button>
+    </footer>
+
+    <!-- Settings Dialog -->
+    <div class="settings-modal hidden" id="settings-modal" role="dialog" aria-labelledby="settings-title" aria-modal="true">
+      <div class="modal-content">
+        <h2 id="settings-title">⚙️ Connection Settings</h2>
+        
+        <div class="settings-group">
+          <label for="connection-mode">Connection Mode</label>
+          <select id="connection-mode">
+            <option value="hybrid">Hybrid (Auto Local / Cloud Fallback)</option>
+            <option value="local">Force Local Session Bridge</option>
+            <option value="cloud">Force Cloud Serverless Proxy</option>
+          </select>
+        </div>
+
+        <div class="settings-group">
+          <label for="local-bridge-url">Local Bridge URL</label>
+          <input type="url" id="local-bridge-url" value="http://localhost:5000" placeholder="e.g. http://localhost:5000">
+        </div>
+
+        <div class="settings-group">
+          <label for="cloud-proxy-url">Cloud Proxy URL</label>
+          <input type="url" id="cloud-proxy-url" value="" placeholder="e.g. https://my-worker.workers.dev">
+        </div>
+
+        <div class="settings-group">
+          <label for="refresh-interval">Auto-Refresh Interval</label>
+          <div class="slider-container">
+            <input type="range" id="refresh-interval" min="5" max="300" step="5" value="30">
+            <span id="interval-display">30s</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="toolbar-btn" id="settings-cancel">Cancel</button>
+          <button class="toolbar-btn primary-btn" id="settings-save">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

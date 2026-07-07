@@ -1,0 +1,12 @@
+# API Keys & Local Configurations
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE & OS Configurations
+.vscode/
+.idea/
+.DS_Store
