@@ -4,7 +4,7 @@ A cross-platform, real-time widget designed to monitor token usage and API rate 
 
 The tool utilizes a hybrid architecture: it can connect to a secure **Local Bridge** on your machine or fall back to a **Serverless Cloud Proxy** to check your status safely without exposing credentials or bloating your main billing limits.
 
-![G-Meters Dashboard Overview](screenshot.png)
+![G-Meters Dashboard Overview](https://raw.githubusercontent.com/keenglomerate/g-meters/main/screenshot.png)
 
 ---
 
